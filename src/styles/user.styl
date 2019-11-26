@@ -1,0 +1,108 @@
+// Put your custom styles here!
+
+// New to Stylus? Check out http://learnboost.github.io/stylus
+// You can use modern CSS thanks to Autoprefixer: https://github.com/ai/autoprefixer
+
+.start-overlay{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #00000090;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.5s;
+}
+
+.start-btn{
+    padding: 10px 10px 10px 10px;
+    background-color: #17EAD1;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    position: relative;
+    transition: 0.5s;
+}
+
+.next-btn{
+    height:100px;
+    width:100px;
+    border-radius: 50px;
+    background-color: #17EAD1;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.5s;
+    position:absolute;
+    top: calc( 50% - 50px );
+    right:50px;
+    justify-content:center;
+    align-items:center;
+    display:flex;
+}
+
+.container{
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #17EAD1;
+    position: relative;
+}
+
+.image-box{
+    width: 30%;
+    height: 70%;
+    border: 5px solid black;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.title-part-learn{
+    width: 100%;
+    height: 10%;
+    background-color: grey;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.img-style-learn{
+    width: 100%;
+    height: 90%;
+}
+
+.img-style-quiz{
+    width: 100%;
+    height: 100%;
+}
+
+.quiz-box{
+    width: 30%;
+    height: 70%;
+    border: 5px solid black;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}
+
+.quiz-option{
+    display: inline-block;
+    width: 100%;
+    padding: 20px 5px 20px 5px;
+    text-align: center;
+}
+
+.quiz-option-group{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
