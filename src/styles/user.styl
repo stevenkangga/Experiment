@@ -26,8 +26,8 @@
 }
 
 .next-btn{
-    height:100px;
-    width:100px;
+    height:80px;
+    width:80px;
     border-radius: 50px;
     background-color: #17EAD1;
     color: white;
@@ -105,4 +105,82 @@
     display: flex;
     flex-direction: column;
     width: 100%;
+}
+
+.yes-no-dialog{
+    text-align: center;
+    background-color: white;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 15px 10px;
+    width: 55%;
+}
+
+.ynd-content{
+    line-height: 1.5;
+}
+
+.btn-yes-no-container{
+    margin-top: 10px;
+}
+
+.yes-btn{
+    padding: 10px 10px 10px 10px;
+    background-color: #17EAD1;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.5s;
+    min-width: 60px;
+    display: inline-block;
+}
+
+.no-btn{
+    display: inline-block;
+    min-width: 60px;
+    padding: 10px 10px 10px 10px;
+    background-color: #E74C3C;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    position: relative;
+    transition: 0.5s;
+}
+
+.score-display{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: white;
+    padding: 20px;
+    font-size: 20px;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+.hint-dialog{
+    width: 175px;
+    text-align: center;
+    background-color: transparent;
+    position: absolute;
+    top: 30%;
+    left: 13%;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    color: white;
+}
+
+.direct-img{
+    top: 40%;
+    left: 20%;
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    transform: rotate(45deg);
 }
