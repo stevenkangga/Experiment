@@ -104,7 +104,7 @@ $(document).ready(function(){
 	//Flip Card
 	$('.flip-card-container').on('click',function(){
 		$(this).css('transform','rotateY(180deg)');
-		let hintIcon = $('.direct-img'), hintImg = $('.hint-dialog'), temp= $('.contoh_aja');
+		let hintIcon = $('.direct-img'), hintImg = $('.hint-dialog');
 		if(hintIcon.length){
 			hintIcon.remove();
 			hintImg.remove();
