@@ -23,9 +23,6 @@
 							<div class="no-btn">No</div>
 						</div>
 					</div>
-					<div class="next-btn">
-						<img src="images/next.png" style="width: 100%; height: 100%;"/>
-					</div>
 				</div>
 				<div id="quiz-part" class="container">
 					<div class="score-display"></div>
@@ -34,10 +31,13 @@
 						Klik kartunya untuk melihat option jawabannya ya.
 					</div>
 				</div>
+				<div class="next-btn">
+					<img src="images/next.png" style="width: 100%; height: 100%;"/>
+				</div>
 				<div class="start-overlay">
 					<div class="result-dialog">
 						<div class="ynd-content">Kamu telah menyelesaikan semua quiz yang diberikan!</div>
-						<div class="ynd-content">Score kamu adalah 10/10.</div>
+						<div id='quiz-result' class="ynd-content">Score kamu adalah 10/10.</div>
 						<div class="btn-yes-no-container">
 							<div class="home-btn">HOME</div>
 						</div>
@@ -45,7 +45,7 @@
 					<div class="start-btn">START</div>
 				</div>
 			</section>
-			
+
 		</article>
 		<script src="build/build.js"></script>
 	</body>

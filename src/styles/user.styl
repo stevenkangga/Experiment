@@ -100,20 +100,35 @@
     display: flex;
     transform: rotateY(180deg);
     backface-visibility: hidden;
+    flex-wrap: wrap;
 }
 
 .quiz-option{
-    display: inline-block;
-    width: 100%;
     text-align: center;
-    border: 2px solid #bbdefb;
-    background-color: #bbdefb;
+    flex: 1 1 50%;
 }
 
-.quiz-option-group{
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+.option-selected{
+    cursor: not-allowed;
+}
+
+.quiz-option a{
+    background-color: #bbdefb;
+    padding: 15px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.option-selected a{
+    cursor: not-allowed;
+}
+
+.correct{
+    background-color: green !important;
+}
+
+.wrong{
+    background-color: red !important;
 }
 
 .yes-no-dialog{
@@ -185,6 +200,7 @@
     justify-content: center;
     display: flex;
     font-weight: bold;
+    transition: 0.8s;
 }
 
 .direct-img{
@@ -194,6 +210,7 @@
     width: 150px;
     height: 150px;
     transform: rotate(45deg);
+    transition: 0.8s;
 }
 
 .home-btn{

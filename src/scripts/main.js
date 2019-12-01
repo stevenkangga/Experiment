@@ -7,7 +7,14 @@ var bullets = require('bespoke-bullets');
 var hash = require('bespoke-hash');
 var prism = require('bespoke-prism');
 var extern = require('bespoke-extern');
-// Static Data
+//Other
+var current_quiz_card = null;
+var quiz_score = 0;
+//App Condition
+const LEARNING = 'learning';
+const QUIZ = 'quiz';
+var APP_CONDITION = LEARNING;
+//Static Data
 const DATA = [
     {
         img_url:'images/Bear_1.jpg',
@@ -50,13 +57,64 @@ bespoke.from({ parent: 'article.deck', slides: 'section' }, [
 const generateLearnCard = (img_url,title,title_en,index) => {
 	return `<div id="learn-${index}" class="image-box"><div class="title-part-learn">${title} = ${title_en}</div><img src="${img_url}" class="img-style-learn"/></div>`;
 }
+const insertCharInString = (indexTarget,answer) => {
+	return answer.slice(0,indexTarget) + answer[indexTarget] + answer.slice(indexTarget,answer.length);
+}
+//Shuffle Array
+const shuffleArray = (arr) => {
+	let dataToReturn = [], choosen = [];
+	do{
+		let tempRandom = (Math.random() * 100).toFixed() % 4;
+		if(choosen.indexOf(tempRandom)===-1){
+			choosen.push(tempRandom);
+			dataToReturn.push(arr[tempRandom]);
+		}
+	}while(dataToReturn.length!==4);
+	return dataToReturn;
+}
+const generateOptions = (answer,mainIndex) => {
+	let currentSize = answer.length, dataToReturn = '', LOOP_LIMIT = 3, choosen = [], option_fix = [], option_shuffle = [];
+	do{
+		if(LOOP_LIMIT===3){
+			option_fix.push(answer);
+		}else{
+			let tempRandom = 0;
+			do{
+				tempRandom = (Math.random() * 100).toFixed() % currentSize;
+				if(choosen.indexOf(tempRandom)===-1){
+					choosen.push(tempRandom);
+					break;
+				}
+			}while(true);
+			option_fix.push(insertCharInString(tempRandom,answer));
+		}
+	}while(LOOP_LIMIT--);
+	option_shuffle = shuffleArray(option_fix);
+	option_shuffle.forEach((element,index)=>{
+		dataToReturn += `<div class="quiz-option"><a resource="${mainIndex}">${element}</a></div>`;
+	});
+	return dataToReturn;
+}
 const generateQuizCard = (img_url,title,title_en,index) => {
-	return `<div class="quiz-animate"><div class="flip-card-container"><div class="flip-image-box"><img src="${img_url}" class="img-style-quiz"/></div><div class="quiz-box"><div class="quiz-option-group"><div class="quiz-option"><a>A. Answer 1</a></div><div class="quiz-option">B. Answer 2</div></div><div class="quiz-option-group"><div class="quiz-option">C. Answer 3</div><div class="quiz-option">D. Answer 4</div></div></div></div></div>`;
+	return `<div class="quiz-animate">
+		<div class="flip-card-container">
+			<div class="flip-image-box">
+				<img src="${img_url}" class="img-style-quiz"/>
+			</div>
+			<div class="quiz-box">
+				${generateOptions(title_en,index)}
+			</div>
+		</div>
+	</div>`;
 }
 const returnToStart = () => {
-	while(LIMIT_DATA<DATA.length){
-		$(`#learn-${LIMIT_DATA}`).css('left','35%');
-		LIMIT_DATA++;
+	let i = 0;
+	while(i<DATA.length){
+		$(`#learn-${i}`).css('left','35%');
+		if(LIMIT_DATA<DATA.length-1){
+			LIMIT_DATA++;
+		}
+		i++;
 	}
 	$('.next-btn').css('transform','scale(1)');
 	$('#yes-no').css('transform','scale(0)');
@@ -65,6 +123,37 @@ const returnToStart = () => {
 }
 const setQuizProgress = () => {
 	$('.score-display').html(`${QUIZ_PROGRESS} / ${MAX_QUIZ}`);
+}
+const loadUpQuiz = () => {
+	let quiz_container = $('#quiz-part');
+	DATA.forEach((element,index)=>{
+		quiz_container.append(generateQuizCard(element.img_url,element.title,element.title_en,index));
+	});
+	//Flip Card
+	$('.flip-card-container').on('click',function(){
+		$(this).css('transform','rotateY(180deg)');
+		current_quiz_card = $(this).parent();
+		let hintIcon = $('.direct-img'), hintImg = $('.hint-dialog');
+		if(hintIcon.length){
+			hintIcon.css('transform','scale(0)');
+			hintImg.css('transform','scale(0)');
+		}
+	})
+	//Quiz Answer
+	$('.quiz-option a').on('click',function(){
+		let parent = $(current_quiz_card);
+		if(!parent.hasClass('option-selected')){
+			$('.next-btn').css('transform','scale(1)');
+			let target = $(this), selectedData = target.text(), targetIndex = target.attr('resource'), mainResource = DATA[targetIndex];
+			if(selectedData===mainResource.title_en){
+				target.addClass('correct');
+				quiz_score++;
+			}else{
+				target.addClass('wrong');
+			}
+			parent.addClass('option-selected')
+		}
+	})
 }
 //Scripts
 $(document).ready(function(){
@@ -82,45 +171,50 @@ $(document).ready(function(){
 	});
 	//Next Button
 	$('.next-btn').on('click',function(){
-		let target = $(`#learn-${LIMIT_DATA}`);
-		target.css('left','-30%');
-		LIMIT_DATA -= 1;
-		if(LIMIT_DATA<0){
+		if(APP_CONDITION===LEARNING){
+			let target = $(`#learn-${LIMIT_DATA}`);
+			target.css('left','-30%');
+			LIMIT_DATA -= 1;
+			if(LIMIT_DATA<0){
+				$(this).css('transform','scale(0)');
+				$('#yes-no').css('transform','scale(1)');
+			}
+		}else if(APP_CONDITION===QUIZ){
+			$(current_quiz_card).css('left','-30%');
 			$(this).css('transform','scale(0)');
-			$('#yes-no').css('transform','scale(1)');
+			if(QUIZ_PROGRESS<MAX_QUIZ){
+				QUIZ_PROGRESS++;
+				setQuizProgress();
+			}else{
+				$('.start-overlay').css('transform','scale(1)');
+				$('.result-dialog').css('transform','scale(1)');
+				$('#quiz-result').text(`Score kamu adalah ${quiz_score} / ${MAX_QUIZ}.`);
+			}
 		}
 	});
 	//Yes Button
 	$('.yes-btn').on('click',function(){
 		$('#quiz-part').css('transform','scale(1)');
+		APP_CONDITION = QUIZ;
 	});
 	//No Button
 	$('.no-btn').on('click',returnToStart);
 	//Load Quiz Card
-	let quiz_container = $('#quiz-part');
-	DATA.forEach((element,index)=>{
-		quiz_container.append(generateQuizCard(element.img_url,element.title,element.title_en));
-	})
-	//Flip Card
-	$('.flip-card-container').on('click',function(){
-		$(this).css('transform','rotateY(180deg)');
-		let hintIcon = $('.direct-img'), hintImg = $('.hint-dialog');
-		if(hintIcon.length){
-			hintIcon.remove();
-			hintImg.remove();
-		}
-	})
-	//Quiz Answer
-	$('.quiz-option').on('click',function(){
-		let target = $(this).parent().parent().parent().parent();
-		target.css('left','-30%');
-		if(QUIZ_PROGRESS<MAX_QUIZ){
-			QUIZ_PROGRESS++;
-			setQuizProgress();
-		}else{
-			$('.start-overlay').css('transform','scale(1)');
-			$('.result-dialog').css('transform','scale(1)');
-		}
-	})
+	loadUpQuiz();
 	//Home Button
+	$('.home-btn').on('click',function(){
+		APP_CONDITION = LEARNING;
+		quiz_score = 0;
+		current_quiz_card = null;
+		QUIZ_PROGRESS = 1;
+		returnToStart();
+		$('.result-dialog').css('transform','scale(0)');
+		$('.quiz-animate').remove();
+		$('.direct-img').css('transform','scale(1)');
+		$('.direct-img').css('transform','rotate(45deg)');
+		$('.hint-dialog').css('transform','scale(1)');
+		loadUpQuiz();
+		setQuizProgress();
+		$('#quiz-part').css('transform','scale(0)');
+	});
 })
