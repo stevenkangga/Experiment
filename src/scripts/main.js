@@ -14,35 +14,39 @@ var quiz_score = 0;
 const LEARNING = 'learning';
 const QUIZ = 'quiz';
 var APP_CONDITION = LEARNING;
+//Data type
+const HEWAN = "HEWAN";
 //Static Data
-const DATA = [
-    {
-        img_url:'images/Bear_1.jpg',
-        title:'Beruang',
-        title_en:'Bear'
-    },
-    {
-        img_url:'images/Cat_1.jpg',
-        title:'Kucing',
-        title_en:'Cat'
-    },
-    {
-        img_url:'images/Chameleon_1.jpg',
-        title:'Bunglon',
-        title_en:'Chameleon'
-    },
-    {
-        img_url:'images/Bear_2.jpg',
-        title:'Beruang',
-        title_en:'Bear'
-    },
-]
+const DATA = {
+	"HEWAN":[
+		{
+			img_url:'images/Bear_1.jpg',
+			title:'Beruang',
+			title_en:'Bear'
+		},
+		{
+			img_url:'images/Cat_1.jpg',
+			title:'Kucing',
+			title_en:'Cat'
+		},
+		{
+			img_url:'images/Chameleon_1.jpg',
+			title:'Bunglon',
+			title_en:'Chameleon'
+		},
+		{
+			img_url:'images/Bear_2.jpg',
+			title:'Beruang',
+			title_en:'Bear'
+		},
+	]
+}
 //Learn Data Progress
-var LIMIT_DATA = DATA.length - 1;
+var LIMIT_DATA = DATA[HEWAN].length - 1;
 //Quiz Progress
 var QUIZ_PROGRESS = 1;
 //Max Quiz
-const MAX_QUIZ = 4;
+const MAX_QUIZ = DATA[HEWAN].length;
 // Bespoke.js
 bespoke.from({ parent: 'article.deck', slides: 'section' }, [
 	classes(),
@@ -109,9 +113,9 @@ const generateQuizCard = (img_url,title,title_en,index) => {
 }
 const returnToStart = () => {
 	let i = 0;
-	while(i<DATA.length){
+	while(i<DATA[HEWAN].length){
 		$(`#learn-${i}`).css('left','35%');
-		if(LIMIT_DATA<DATA.length-1){
+		if(LIMIT_DATA<DATA[HEWAN].length-1){
 			LIMIT_DATA++;
 		}
 		i++;
@@ -126,7 +130,7 @@ const setQuizProgress = () => {
 }
 const loadUpQuiz = () => {
 	let quiz_container = $('#quiz-part');
-	DATA.forEach((element,index)=>{
+	DATA[HEWAN].forEach((element,index)=>{
 		quiz_container.append(generateQuizCard(element.img_url,element.title,element.title_en,index));
 	});
 	//Flip Card
@@ -144,12 +148,14 @@ const loadUpQuiz = () => {
 		let parent = $(current_quiz_card);
 		if(!parent.hasClass('option-selected')){
 			$('.next-btn').css('transform','scale(1)');
-			let target = $(this), selectedData = target.text(), targetIndex = target.attr('resource'), mainResource = DATA[targetIndex];
+			let target = $(this), selectedData = target.text(), targetIndex = target.attr('resource'), mainResource = DATA[HEWAN][targetIndex];
 			if(selectedData===mainResource.title_en){
 				target.addClass('correct');
 				quiz_score++;
+				$('.true-icon').css('transform','scale(1)');
 			}else{
 				target.addClass('wrong');
+				$('.false-icon').css('transform','scale(1)');
 			}
 			parent.addClass('option-selected')
 		}
@@ -159,7 +165,7 @@ const loadUpQuiz = () => {
 $(document).ready(function(){
 	//Load Up Card to Learn
 	let learn_container = $('#learn-container');
-	DATA.forEach((element,index)=>{
+	DATA[HEWAN].forEach((element,index)=>{
 		learn_container.append(generateLearnCard(element.img_url,element.title,element.title_en,index));
 	});
 	//Load Up Quiz Progress
@@ -182,6 +188,8 @@ $(document).ready(function(){
 		}else if(APP_CONDITION===QUIZ){
 			$(current_quiz_card).css('left','-30%');
 			$(this).css('transform','scale(0)');
+			$('.true-icon').css('transform','scale(0)');
+			$('.false-icon').css('transform','scale(0)');
 			if(QUIZ_PROGRESS<MAX_QUIZ){
 				QUIZ_PROGRESS++;
 				setQuizProgress();
