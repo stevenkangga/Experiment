@@ -30,5 +30,8 @@
   },
   "engines": {
     "node": ">=4.2.0"
+  },
+  "dependencies": {
+    "bespoke-theme-cube": "^2.0.1"
   }
 }
